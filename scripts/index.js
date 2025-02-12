@@ -16,6 +16,7 @@ function addCard(cardData, deleteCallback) {
 
   cardImage.src = cardData.link;
   cardTitle.textContent = cardData.name;
+  cardImage.alt = cardData.name;
 
   cardDeleteButton.addEventListener('click', () => {
     deleteCallback(cardElement);
