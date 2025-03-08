@@ -4,6 +4,27 @@ import { initialCards } from './scripts/cards.js';
 import { closeModal, openModal } from './scripts/modal.js';
 import { createCard, handleLikeCard, handleDeleteCard } from './scripts/card.js';
 
+const popups = document.querySelectorAll('.popup');
+
+//используем forEach для всех попапов и добавляем обработчики закрытия
+
+popups.forEach((popup) => {
+  const closeButton = popup.querySelector('.popup__close');
+  if (closeButton) {
+    closeButton.addEventListener('click', () => {
+      closeModal(popup);
+    });
+  }
+});
+
+popups.forEach((popup) => {
+  popup.addEventListener('mousedown', (evt) => {
+    if (evt.target.classList.contains('popup')) {
+      closeModal(popup);
+    }
+  });
+});
+
 const elements = {
 
   editButton: document.querySelector('.profile__edit-button'),
@@ -26,7 +47,7 @@ const elements = {
 };
 
 //обработчик отправки формы для профиля
-function handleFormSubmit(evt) {
+function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   elements.profileTitle.textContent = elements.nameInput.value;
   elements.profileDescription.textContent = elements.descriptionInput.value;
@@ -68,7 +89,7 @@ elements.addButton.addEventListener('click', () => {
   openModal(elements.addPopup);
 });
 
-elements.formElement.addEventListener('submit', handleFormSubmit);
+elements.formElement.addEventListener('submit', handleProfileFormSubmit);
 elements.addForm.addEventListener('submit', handleAddCardSubmit);
 
 //добавляем карточки
