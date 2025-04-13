@@ -1,3 +1,5 @@
+import { removeCard, likeCard, unLikeCard } from './api.js';
+
 // Функция создания карточки
 export function createCard(cardData, deleteCallback, likeCallback, openImageCallback, userId) {
   const cardTemplate = document.querySelector('#card-template').content;
@@ -9,24 +11,28 @@ export function createCard(cardData, deleteCallback, likeCallback, openImageCall
   const cardLikeButton = cardElement.querySelector('.card__like-button');
   const cardLikeCount = cardElement.querySelector('.card__like-count');
 
+  // Заполняем карточку данными
   cardImage.src = cardData.link;
   cardImage.alt = cardData.name;
   cardTitle.textContent = cardData.name;
 
+  // Отображаем количество лайков
   cardLikeCount.textContent = cardData.likes.length;
 
+  // Проверяем, лайкнул ли текущий пользователь карточку
   const isLiked = cardData.likes.some((like) => like._id === userId);
   if (isLiked) {
     cardLikeButton.classList.add('card__like-button_is-active');
   }
 
+  // Показываем кнопку удаления только для своих карточек
   if (cardData.owner._id === userId) {
     cardDeleteButton.style.display = 'block';
   } else {
     cardDeleteButton.style.display = 'none';
   }
 
-  // Обработчики
+  // Обработчики событий
   cardDeleteButton.addEventListener('click', () => {
     deleteCallback(cardData._id, cardElement);
   });
@@ -42,6 +48,7 @@ export function createCard(cardData, deleteCallback, likeCallback, openImageCall
   return cardElement;
 }
 
+// Функция для обработки лайка карточки
 export function handleLikeCard(cardId, likeButton, likeCount) {
   const isLiked = likeButton.classList.contains('card__like-button_is-active');
 
@@ -61,7 +68,7 @@ export function handleLikeCard(cardId, likeButton, likeCount) {
     .catch((error) => console.error('Ошибка при лайке карточки:', error));
 }
 
-// Функция удаления карточки
+// Функция для удаления карточки
 export function handleDeleteCard(cardId, cardElement) {
   fetch(`https://nomoreparties.co/v1/wff-cohort-34/cards/${cardId}`, {
     method: 'DELETE',
@@ -79,4 +86,3 @@ export function handleDeleteCard(cardId, cardElement) {
     })
     .catch((error) => console.error('Ошибка при удалении карточки:', error));
 }
-

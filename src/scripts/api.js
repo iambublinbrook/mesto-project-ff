@@ -1,79 +1,102 @@
 const token = '600ff3c5-dec1-43d8-a99c-2099edf0c668';
-const group = 'wff-cohort-34';
-
+const group = 'wff-cohort-36';
 const config = {
   baseUrl: `https://nomoreparties.co/v1/${group}`,
   headers: {
-    authorization: `Bearer ${token}`,
+    authorization: token,
     'Content-Type': 'application/json',
   },
 };
 
-function makeRequest(endpoint, method = 'GET', body = null) {
-  const url = `${config.baseUrl}${endpoint}`;
-  const options = {
-    method,
-    headers: config.headers,
-  };
-
-  if (body) {
-    options.body = JSON.stringify(body);
+function request(res) {
+  if (res.ok) {
+    return res.json();
   }
-
-  return fetch(url, options).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    // Возвращаем ошибку
-    return Promise.reject({
-      status: res.status,
-      message: `Ошибка при выполнении запроса ${res.url}. Статус ${res.status}`,
-    });
-  });
+  return Promise.reject(`Ошибка: ${res.status}`);
 }
 
-export function getUserInfo() {
-  return makeRequest('/users/me', 'GET');
+const getInitialCards = () => {
+  return fetch(`${config.baseUrl}/cards`, {
+    method: 'GET',
+    headers: config.headers
+  })
+    .then(request)
 }
 
-export function getInitialCards() {
-  return makeRequest('/cards', 'GET');
+const getUserInfo = () => {
+  return fetch(`${config.baseUrl}/users/me`, {
+    method: 'GET',
+    headers: config.headers
+  })
+    .then(request)
 }
 
-export function updateUserInfo(name, about) {
-  return makeRequest('/users/me', 'PATCH', { name, about });
+const updateUserInfo = (name, about) => {
+  return fetch(`${config.baseUrl}/users/me`, {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({
+      name: name,
+      about: about
+    })
+  })
+    .then(request)
 }
 
-export function addNewCard(name, link) {
-  return makeRequest('/cards', 'POST', { name, link });
+const addNewCard = (data) => {
+  return fetch(`${config.baseUrl}/cards`, {
+    method: 'POST',
+    headers: config.headers,
+    body: JSON.stringify(data)
+  })
+    .then(request)
 }
 
-export function deleteCard(cardId) {
-  return makeRequest(`/cards/${cardId}`, 'DELETE');
+const removeCard = (cardID) => {
+  return fetch(`${config.baseUrl}/cards/${cardID}`, {
+    method: 'DELETE',
+    headers: config.headers
+  })
+    .then(request)
 }
 
-export function likeCard(cardId) {
-  return makeRequest(`/cards/likes/${cardId}`, 'PUT');
+const likeCard = (cardID) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardID}`, {
+    method: 'PUT',
+    headers: config.headers
+  })
+    .then(request)
 }
 
-export function unlikeCard(cardId) {
-  return makeRequest(`/cards/likes/${cardId}`, 'DELETE');
+const unLikeCard = (cardID) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardID}`, {
+    method: 'DELETE',
+    headers: config.headers
+  })
+    .then(request)
 }
 
-
-export function updateUserAvatar(avatar) {
-  return makeRequest('/users/me/avatar', 'PATCH', { avatar });
+const updateUserAvatar = (avatar) => {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar,
+    })
+  })
+    .then(request)
 }
 
-export function getInitialData(onSuccess, onError) {
-  const cards = makeRequest('/cards');
-  const profile = makeRequest('/users/me');
+export {
 
-  Promise.all([cards, profile])
-    .then(([cards, profile]) => onSuccess(cards, profile))
-    .catch((error) => onError(error));
-}
-//проверка
-makeRequest('/cards', 'GET')
-  .then((data) => console.log('Карточки:', data))
-  .catch((error) => console.error('Ошибка:', error));
+  getInitialCards,
+  getUserInfo,
+  updateUserInfo,
+  addNewCard,
+  removeCard,
+  likeCard,
+  unLikeCard,
+  updateUserAvatar
+
+};
+
