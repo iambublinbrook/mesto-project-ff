@@ -1,11 +1,11 @@
-const token = '600ff3c5-dec1-43d8-a99c-2099edf0c668';
+const token = '66ca7623-06da-47c7-a293-0bb67147d69b';
 const group = 'wff-cohort-36';
 const config = {
   baseUrl: `https://nomoreparties.co/v1/${group}`,
   headers: {
     authorization: token,
-    'Content-Type': 'application/json',
-  },
+    'Content-Type': 'application/json'
+  }
 };
 
 function request(res) {
@@ -76,13 +76,13 @@ const unLikeCard = (cardID) => {
     .then(request)
 }
 
-const updateUserAvatar = (avatar) => {
+const updateUserAvatar = (avatarUrl) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
-      avatar,
-    })
+      avatar: avatarUrl
+    }),
   })
     .then(request)
 }
