@@ -29,7 +29,7 @@ const elements = {
   imageTypePopup: document.querySelector('.popup_type_image'),
   editAvatarPopup: document.querySelector('.popup_type_edit-avatar'),
   popupImage: document.querySelector('.popup__image'),
-  popupCaption: document.querySelector('.popup__caption'),
+  popupImageCaption: document.querySelector('.popup__caption'),
 
   //кнопки
   editButton: document.querySelector('.profile__edit-button'),
@@ -37,7 +37,7 @@ const elements = {
 
   //формы и инпуты
   editAvatarForm: document.querySelector('.popup__form[name="edit-avatar"]'),
-  formElement: document.querySelector('.popup_type_edit .popup__form'),
+  editProfileForm: document.querySelector('.popup_type_edit .popup__form'),
   addForm: document.querySelector('.popup_type_new-card .popup__form'),
   nameInput: document.querySelector('.popup__input_type_name'),
   descriptionInput: document.querySelector('.popup__input_type_description'),
@@ -91,7 +91,7 @@ function openImagePopup(cardData) {
 
   elements.popupImage.src = cardData.link;
   elements.popupImage.alt = cardData.name;
-  elements.popupCaption.textContent = cardData.name;
+  elements.popupImageCaption.textContent = cardData.name;
   openModal(elements.imageTypePopup);
 }
 
@@ -111,7 +111,6 @@ const handleProfileFormSubmit = (evt) => {
     })
     .catch((error) => {
       console.error('Ошибка при обновлении профиля:', error);
-      showFormError('Не удалось обновить профиль. Попробуйте ещё раз.');
     })
     .finally(() => {
       saveButton.textContent = 'Сохранить';
@@ -172,7 +171,6 @@ const handleEditAvatarSubmit = (evt) => {
     })
     .catch((error) => {
       console.error('Ошибка', error);
-      showFormError('Не удалось обновить аватар. Попробуйте ещё раз.');
     })
     .finally(() => {
       saveButton.textContent = 'Сохранить';
@@ -192,7 +190,7 @@ document.querySelectorAll('.popup').forEach((popup) => {
 elements.editButton.addEventListener('click', () => {
   fillProfileForm();
   openModal(elements.editPopup);
-  clearValidation(elements.formElement, validationConfig);
+  clearValidation(elements.editProfileForm, validationConfig);
 });
 
 // Открытие попапа добавления карточки
@@ -212,7 +210,7 @@ elements.profileAvatarContainer.addEventListener('click', () => {
 });
 
 //обработчики submit
-elements.formElement.addEventListener('submit', handleProfileFormSubmit);
+elements.editProfileForm.addEventListener('submit', handleProfileFormSubmit);
 elements.addForm.addEventListener('submit', handleAddCardSubmit);
 elements.editAvatarForm.addEventListener('submit', handleEditAvatarSubmit);
 
