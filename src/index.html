@@ -79,8 +79,8 @@
         <h3 class="popup__title">Обновить аватар</h3>
         <form class="popup__form" name="edit-avatar" novalidate>
           <input type="url" id="avatar-url-input" name="avatar-url" class="popup__input popup__input_type_avatar-url"
-            placeholder="Ссылка на аватар" required />
-          <span class="popup__error avatar-url-error"></span>
+            placeholder="Ссылка на аватар" data-error-message="Введите URL." required />
+          <span class="popup__error-message avatar-url-input-error"></span>
           <button class="popup__button" type="submit">Сохранить</button>
         </form>
       </div>
